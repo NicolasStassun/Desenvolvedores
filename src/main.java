@@ -3,51 +3,44 @@ import java.util.ArrayList;
 
 public class main {
 
-    static ArrayList<Desenvolvedor> devs = new ArrayList<>();
-
     public static void main(String[] args) {
-        int teste4 = 7;
-        do {
             menu();
-        } while (teste4 == 7);
-
     }
     public static void menu(){
 
-        int opcao = Integer.parseInt(JOptionPane.showInputDialog("""
+        do {
+            int opcao = Integer.parseInt(JOptionPane.showInputDialog("""
                 1 - Login
                 2 - Registrar
                 3 - Sair
                 """));
-        if (opcao == 1) {
+            if (opcao == 1) {
 
-            login();
+                login();
 
-        } else if (opcao == 2) {
+            } else if (opcao == 2) {
 
-            register();
+                register();
 
-        } else if (opcao == 3) {
+            } else if (opcao == 3) {
 
-            System.exit(0);
+                System.exit(0);
 
-        }
+            }
+        }while (true);
+
 
     }
     static Desenvolvedor Logado = new Desenvolvedor(null,null,null,null,0,null,null,null,null,0.0);
-    static String senhaLogado;
-    static String cpfLogado;
-
 
     public static void login(){
 
         String cpf = JOptionPane.showInputDialog("CPF");
 
 
-        for (Desenvolvedor i:
-             devs) {
+        for (Desenvolvedor i: Desenvolvedor.devs) {
 
-            if(i.cpf.equals(cpf)){
+            if(i.getCpf().equals(cpf)){
 
                 int erros = 0;
                 do {
@@ -55,15 +48,13 @@ public class main {
                     String senha = JOptionPane.showInputDialog("Senha");
 
                     for (Desenvolvedor j:
-                            devs) {
+                            Desenvolvedor.devs) {
 
-                        if(i.senha.equals(senha)){
+                        if(i.getSenha().equals(senha)){
 
                             Logado = j;
-                            senhaLogado = j.senha;
-                            cpfLogado = j.cpf;
 
-                             Logado.index = devs.indexOf(j);
+                             Logado.index = Desenvolvedor.devs.indexOf(j);
 
                             menuDev();
 
@@ -75,12 +66,11 @@ public class main {
                 }while (erros!=3);
 
             }
-            JOptionPane.showMessageDialog(null,"CPF Inválido");
-            menu();
+
 
         }
 
-
+        JOptionPane.showMessageDialog(null,"CPF Inválido");
 
     }
     public static void register(){
@@ -95,7 +85,7 @@ public class main {
         String telefone;
         String vaga_que_pretende;
         double pretencao_salarial;
-        String parar = "";
+        String parar;
 
         cpf = JOptionPane.showInputDialog("""
                 Informe seu cpf
@@ -108,13 +98,12 @@ public class main {
         do{
 
             lista_de_linguagens_que_sabe_programar.add(JOptionPane.showInputDialog("Qual liguem de programação você sabe?"));
-            String pararWhile = JOptionPane.showInputDialog("""
+            parar = JOptionPane.showInputDialog("""
                     Deseja informar mais alguma?
                     
                          Sim           Não
                          
                     """);
-            parar = pararWhile;
 
         }while(parar.equals("sim") || parar.equals("Sim"));
 
@@ -123,9 +112,9 @@ public class main {
         vaga_que_pretende = JOptionPane.showInputDialog("Informe a vaga que pretende trabalhar");
         pretencao_salarial = Double.parseDouble(JOptionPane.showInputDialog("Informe sua preteção salarial"));
         for (Desenvolvedor i:
-                devs) {
+                Desenvolvedor.devs) {
 
-            if(i.cpf.equals(cpf)){
+            if(i.getCpf().equals(cpf)){
 
                 JOptionPane.showMessageDialog(null,"CPF já cadastrado");
                 return;
@@ -135,44 +124,46 @@ public class main {
         }
 
         Desenvolvedor dev = new Desenvolvedor(cpf,senha,nome,sobrenome,idade,lista_de_linguagens_que_sabe_programar,email,telefone,vaga_que_pretende,pretencao_salarial);
-        devs.add(dev);
+        Desenvolvedor.devs.add(dev);
         JOptionPane.showMessageDialog(null, "O Dev foi registrado");
 
     }
 
 
-    public static void menuDev(){
+    public static void menuDev() {
 
-        int opcao = Integer.parseInt(JOptionPane.showInputDialog("""
-                
-                1 - Editar perfil
-                2 - Remover Conta
-                3 - Informações dos Usuários
-                4 - Logout 
-                """));
-        if(opcao == 1){
+        boolean logout = false;
 
-            editarPerfil();
+        do {
 
-        }
-        else if(opcao == 2){
+            int opcao = Integer.parseInt(JOptionPane.showInputDialog("""
+                                    
+                    1 - Editar perfil
+                    2 - Remover Conta
+                    3 - Informações dos Usuários
+                    4 - Logout
+                    """));
+            if (opcao == 1) {
 
-            remove();
+                editarPerfil();
 
-        }
-        else if(opcao == 3){
+            } else if (opcao == 2) {
 
-            infGeral();
+                Logado.remove();
+                logout = true;
 
-        }
-        else if(opcao == 4){
+            } else if (opcao == 3) {
 
-            logout();
+                infGeral();
 
-        }
+            } else if (opcao == 4) {
+
+                logout = logout();
+
+            }
 
 
-
+        } while (!logout);
     }
     public static void editarPerfil(){
 
@@ -193,54 +184,31 @@ public class main {
                
                 """);
         if (opcao.equals("1")){
-            String oldCpf = Logado.cpf;
             String cpf = JOptionPane.showInputDialog("Informe seu novo CPF");
-            Logado.cpf = (cpf);
-            for (Desenvolvedor i:
-                    devs) {
-
-                if(i.senha.equals(oldCpf)){
-                    i.cpf = cpf;
-                }
-
-            }
-            menuDev();
+            Logado.setCpf(cpf);
         }
         else if (opcao.equals("2")){
-            String oldSenha = Logado.senha;
             String senha = JOptionPane.showInputDialog("Informe sua nova senha");
-            Logado.cpf = (senha);
-            for (Desenvolvedor i:
-                    devs) {
-
-                if(i.senha.equals(oldSenha)){
-                    i.senha = senha;
-                }
-
-            }
-            menuDev();
+            Logado.setSenha(senha);
         }
         else if (opcao.equals("3")){
 
             String nome = JOptionPane.showInputDialog("Informe seu novo nome");
-            Logado.nome = (nome);
-            menuDev();
+            Logado.setNome(nome);
         }
         else if (opcao.equals("4")){
 
             String sobrenome = JOptionPane.showInputDialog("Informe seu novo sobrenome");
-            Logado.sobrenome = (sobrenome);
-            menuDev();
+            Logado.setSobrenome(sobrenome);
         }
         else if (opcao.equals("5")){
 
             int idade = Integer.parseInt(JOptionPane.showInputDialog("Informe sua nova idade"));
-            Logado.idade = (idade);
-            menuDev();
+            Logado.setIdade(idade);
         }
         else if (opcao.equals("6")) {
             String parar;
-            ArrayList<String> lista_de_linguagens_que_sabe_programar2 = new ArrayList<>();
+            ArrayList<String> lista_de_linguagens_que_sabe_programar2;
             do {
 
                 ArrayList<String> lista_de_linguagens_que_sabe_programar = new ArrayList<>();
@@ -248,84 +216,54 @@ public class main {
                 lista_de_linguagens_que_sabe_programar2 = lista_de_linguagens_que_sabe_programar;
 
                 lista_de_linguagens_que_sabe_programar.add(JOptionPane.showInputDialog("Qual liguem de programação você sabe?"));
-                String pararWhile = JOptionPane.showInputDialog("""
+                parar = JOptionPane.showInputDialog("""
                         Deseja informar mais alguma?
                                             
                              Sim           Não
                              
                         """);
-                parar = pararWhile;
 
 
             } while (parar.equals("sim") || parar.equals("Sim"));
 
-            Logado.lista_de_linguagens_que_sabe_programar = (lista_de_linguagens_que_sabe_programar2);
+            Logado.setLista_de_linguagens_que_sabe_programar(lista_de_linguagens_que_sabe_programar2);
             menuDev();
 
         }
         else if (opcao.equals("7")){
 
             String email = JOptionPane.showInputDialog("Informe seu novo email");
-            Logado.email = (email);
-            menuDev();
+            Logado.setEmail(email);
         }
         else if (opcao.equals("8")){
 
             String telefone = JOptionPane.showInputDialog("Informe seu novo telefone");
-            Logado.telefone = (telefone);
-            menuDev();
+            Logado.setTelefone(telefone);
         }
         else if (opcao.equals("9")){
 
             String vaga_que_pretende = JOptionPane.showInputDialog("Informe sua vaga de interesse");
-            Logado.vaga_que_pretende = (vaga_que_pretende);
-            menuDev();
+            Logado.setVaga_que_pretende(vaga_que_pretende);
         }
         else if (opcao.equals("10")){
 
             double pretancao_salarial = Double.parseDouble(JOptionPane.showInputDialog("Informe sua nova idade"));
-            Logado.pretencao_salarial = (pretancao_salarial);
-            menuDev();
+            Logado.setPretencao_salarial(pretancao_salarial);
         }
         else{
             menuDev();
         }
 
     }
-
-    public static void remove(){
-
-        devs.remove(Logado.index);
-        JOptionPane.showMessageDialog(null,"Seu usuário foi removido");
-        menu();
-
-    }
     public static void infGeral(){
 
-        Desenvolvedor.informacoesGeral(devs);
+        Logado.informacoesGeral();
         menuDev();
 
     }
-    public static void logout() {
+    public static boolean logout(){
 
-        for (Desenvolvedor i :
-                devs) {
-            if (i.cpf.equals(cpfLogado)) {
-
-
-                for (Desenvolvedor j :
-                        devs) {
-
-                    if (j.senha.equals(senhaLogado)) {
-
-                        j = Logado;
-
-                    }
-
-                }
-            }
-        }
-        menu();
+        return true;
     }
 
 }
