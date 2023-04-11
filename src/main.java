@@ -75,26 +75,34 @@ public class main {
     }
     public static void register(){
 
-        String cpf;
-        String senha;
-        String nome;
-        String sobrenome;
+        String cpf,senha, nome, sobrenome, email, telefone, vaga_que_pretende, parar;
         int idade;
         ArrayList<String> lista_de_linguagens_que_sabe_programar = new ArrayList<>();
-        String email;
-        String telefone;
-        String vaga_que_pretende;
         double pretencao_salarial;
-        String parar;
+
+//       Recebe o cpf do usuário sendo cadastrado
 
         cpf = JOptionPane.showInputDialog("""
                 Informe seu cpf
                 xxx.xxx.xxx-xx
                 """);
+
         senha = JOptionPane.showInputDialog("Informe sua senha");
+
+//        Recebe o nome do usuário sendo cadastrado
+
         nome = JOptionPane.showInputDialog("Informe seu nome");
+
+//        Recebe o sobrenome do usuário sendo cadastrado
+
         sobrenome = JOptionPane.showInputDialog("Informe seu sobrenome");
+
+//        Recebe a idade do usuário sendo cadastrado
+
         idade =Integer.parseInt(JOptionPane.showInputDialog("Informe sua idade"));
+
+//        Recebe as linguagens de programação que o usuário sendo cadastrado sabe programar.
+
         do{
 
             lista_de_linguagens_que_sabe_programar.add(JOptionPane.showInputDialog("Qual liguem de programação você sabe?"));
